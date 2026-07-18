@@ -1,0 +1,98 @@
+{% assign wx = locality_weather_data %}
+{% assign temp = wx.temperature %}
+{% assign humidity = wx.humidity %}
+{% assign wind_speed_ms = wx.wind_speed %}
+{% assign wind_dir = wx.wind_direction %}
+{% assign rain_i = wx.rain_intensity %}
+{% assign rain_a = wx.rain_accumulation %}
+{% if wind_speed_ms %}
+  {% assign wind_kmh = wind_speed_ms | times: 3.6 | round: 1 %}
+{% endif %}
+{% if rain_i and rain_i > 0 %}
+  {% if rain_i >= 2.5 %}
+    {% assign conditions = "Heavy rain" %}
+  {% elsif rain_i >= 0.5 %}
+    {% assign conditions = "Moderate rain" %}
+  {% else %}
+    {% assign conditions = "Light rain" %}
+  {% endif %}
+{% elsif humidity and humidity >= 80 %}
+  {% assign conditions = "Humid" %}
+{% else %}
+  {% assign conditions = "Clear" %}
+{% endif %}
+
+<div class="view view--full">
+  {% if message and message != blank and message != "Successful response fetched" and status == "200" %}
+    <div class="layout layout--col gap--large">
+      <span class="value value--small">{{ message }}</span>
+      <span class="label">Use a lat/lon near a Weather Union station in India.</span>
+    </div>
+  {% else %}
+    <div class="layout layout--col gap--space-between">
+      <div class="grid">
+        <div class="col col--span-4 col--end">
+          <div class="item h--full">
+            <div class="content">
+              {% if temp %}
+                <span class="value value--xxxlarge" data-fit-value="true">{{ temp | round: 1 }}°</span>
+                <span class="label">{{ conditions }} · °C</span>
+              {% else %}
+                <span class="value value--xlarge">{{ conditions }}</span>
+                <span class="label">Device type {{ device_type }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col col--span-4 col--end gap--medium">
+          {% if humidity %}
+            <div class="item">
+              <div class="content">
+                <span class="value value--small">{{ humidity | round }}%</span>
+                <span class="label">Humidity</span>
+              </div>
+            </div>
+          {% endif %}
+          {% if wind_kmh %}
+            <div class="item">
+              <div class="content">
+                <span class="value value--small">{{ wind_kmh }} km/h</span>
+                <span class="label">Wind{% if wind_dir %} · {{ wind_dir | round }}°{% endif %}</span>
+              </div>
+            </div>
+          {% endif %}
+          {% if rain_i %}
+            <div class="item">
+              <div class="content">
+                <span class="value value--small">{{ rain_i }} mm/min</span>
+                <span class="label">Rain intensity</span>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="w-full b-h-gray-5"></div>
+
+      <div class="grid grid--cols-2">
+        <div class="item">
+          <div class="content">
+            <span class="value value--small">{% if rain_a %}{{ rain_a }} mm{% else %}—{% endif %}</span>
+            <span class="label">Rain today (IST)</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="content">
+            <span class="value value--xsmall">{{ trmnl.plugin_settings.custom_fields_values.location_label | default: "Weather Union" }}</span>
+            <span class="label">{% if device_type == 1 %}AWS station{% elsif device_type == 2 %}Rain gauge{% else %}Station{% endif %}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="title_bar">
+    <span class="title">Weather Union</span>
+    <span class="instance">{{ trmnl.plugin_settings.custom_fields_values.location_label | default: "India" }}</span>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+# Import these values into a TRMNL Private Plugin (Polling strategy).
+name: Weather Union
+strategy: polling
+# Interpolates form fields: api_key is sent as a header; lat/lon go in the URL.
+# If you prefer locality_id, switch the polling_url to get_locality_weather_data.
+polling_url: https://www.weatherunion.com/gw/weather/external/v0/get_weather_data?latitude=##{{ latitude }}&longitude=##{{ longitude }}
+polling_headers: x-zomato-api-key=##{{ api_key }}
+refresh_interval: 30

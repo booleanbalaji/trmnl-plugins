@@ -1,0 +1,32 @@
+- keyname: api_key
+  field_type: string
+  name: Weather Union API Key
+  description: Free API key from your Weather Union profile (weatherunion.com → profile → Your API access key).
+  placeholder: paste your x-zomato-api-key value
+  encrypted: true
+- keyname: lat_lon
+  field_type: string
+  name: Latitude / Longitude
+  description: Your location as comma-separated lat,lon. Weather Union returns data from the nearest station within ~2 km. Example Delhi CP 28.630630,77.220640
+  placeholder: 28.630630, 77.220640
+  optional: true
+- keyname: locality_id
+  field_type: string
+  name: Locality ID (optional)
+  description: Prefer a specific station with a ZWLxxxxxx locality ID. When set, this overrides lat/lon. See the Weather Union locality list PDF.
+  placeholder: ZWL006538
+  optional: true
+- keyname: location_label
+  field_type: string
+  name: Location label (optional)
+  description: Custom title shown on the screen. Defaults to the nearest known locality name.
+  placeholder: Connaught Place
+  optional: true
+- keyname: units
+  field_type: select
+  name: Units
+  description: Temperature and wind speed units.
+  options:
+    - Metric
+    - Imperial
+  default: metric

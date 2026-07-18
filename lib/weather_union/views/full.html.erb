@@ -1,0 +1,102 @@
+<div class="view view--full">
+  <% if error.present? %>
+    <div class="layout layout--col gap--large">
+      <span class="value value--small weather-union-error"><%= error %></span>
+      <span class="label">Get a free API key at weatherunion.com, then set lat/lon or a locality ID.</span>
+    </div>
+  <% else %>
+    <div class="layout layout--col gap--space-between">
+      <div class="grid">
+        <div class="row row--center col--span-3 col--end">
+          <img class="weather-union-image" src="<%= Rails.application.credentials.base_url %>/images/weather/<%= weather_image %>.svg" />
+        </div>
+
+        <div class="col col--span-3 col--end">
+          <div class="item h--full">
+            <div class="meta"></div>
+            <div class="content">
+              <% if temperature.present? %>
+                <span class="value value--xxxlarge" data-fit-value="true"><%= temperature %>°</span>
+                <span class="label"><%= conditions %> · <%= units[:temperature] %></span>
+              <% else %>
+                <span class="value value--xlarge" data-fit-value="true"><%= conditions %></span>
+                <span class="label"><%= device_type_label %></span>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col col--span-3 col--end gap--medium">
+          <% if humidity.present? %>
+            <div class="item">
+              <div class="meta"></div>
+              <div class="icon">
+                <img class="weather-union-icon" src="<%= Rails.application.credentials.base_url %>/images/weather/wi-humidity.svg" />
+              </div>
+              <div class="content">
+                <span class="value value--small"><%= humidity %>%</span>
+                <span class="label">Humidity</span>
+              </div>
+            </div>
+          <% end %>
+
+          <% if wind_speed.present? %>
+            <div class="item">
+              <div class="meta"></div>
+              <div class="icon">
+                <img class="weather-union-icon" src="<%= Rails.application.credentials.base_url %>/images/weather/wi-strong-wind.svg" />
+              </div>
+              <div class="content">
+                <span class="value value--small"><%= wind_speed %> <%= units[:wind] %></span>
+                <span class="label">Wind <%= wind_cardinal %><% if wind_direction.present? %> (<%= wind_direction %>°)<% end %></span>
+              </div>
+            </div>
+          <% end %>
+
+          <% if rain_intensity.present? %>
+            <div class="item">
+              <div class="meta"></div>
+              <div class="icon">
+                <img class="weather-union-icon" src="<%= Rails.application.credentials.base_url %>/images/weather/wi-rain.svg" />
+              </div>
+              <div class="content">
+                <span class="value value--small"><%= rain_intensity %> mm/min</span>
+                <span class="label">Rain intensity</span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="w-full b-h-gray-5"></div>
+
+      <div class="grid grid--cols-3">
+        <div class="item">
+          <div class="meta"></div>
+          <div class="content">
+            <span class="value value--small"><%= rain_accumulation.nil? ? '—' : "#{rain_accumulation} #{units[:rain]}" %></span>
+            <span class="label">Rain today (IST)</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="meta"></div>
+          <div class="content">
+            <span class="value value--small"><%= device_type_label %></span>
+            <span class="label">Device</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="meta"></div>
+          <div class="content">
+            <span class="value value--xsmall"><%= locality_name.presence || location_label %></span>
+            <span class="label"><%= city_name.presence || 'Nearest locality' %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <%= render 'plugins/weather_union/shared/title_bar', location_label: location_label, refreshed_at: refreshed_at %>
+</div>
+
+<%= render 'plugins/weather_union/common' %>

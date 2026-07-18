@@ -1,0 +1,5 @@
+<div class="title_bar">
+  <img class="image" src="<%= Rails.application.credentials.base_url %>/images/plugins/weather--render.svg" />
+  <h1 class="title">Weather Union</h1>
+  <span class="instance"><%= location_label %><% if local_assigns[:refreshed_at].present? %> (<%= refreshed_at %>)<% end %></span>
+</div>
