@@ -44,3 +44,8 @@ Weather Union only covers instrumented localities in India. Coordinates outside 
 | Half vertical | Compact metrics grid |
 | Half horizontal | Temperature + humidity/rain |
 | Quadrant | Temperature, humidity, rain today |
+
+## Deploy to your device
+
+See [DEPLOY.md](./DEPLOY.md) for TRMNL MCP, ZIP import, and `trmnlp push`.
+Importable archive: [`weather-union-trmnl.zip`](./weather-union-trmnl.zip).
