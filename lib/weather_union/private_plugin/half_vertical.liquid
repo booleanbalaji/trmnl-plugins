@@ -1,0 +1,61 @@
+{% assign wx = locality_weather_data %}
+{% assign temp = wx.temperature %}
+{% assign humidity = wx.humidity %}
+{% assign wind_speed_ms = wx.wind_speed %}
+{% assign rain_i = wx.rain_intensity %}
+{% assign rain_a = wx.rain_accumulation %}
+{% if wind_speed_ms %}
+  {% assign wind_kmh = wind_speed_ms | times: 3.6 | round: 1 %}
+{% endif %}
+{% if rain_i and rain_i > 0 %}
+  {% assign conditions = "Rain" %}
+{% else %}
+  {% assign conditions = "Clear" %}
+{% endif %}
+
+<div class="layout layout--col gap--medium">
+  <div class="item">
+    <div class="content">
+      {% if temp %}
+        <span class="value value--xlarge" data-fit-value="true">{{ temp | round: 1 }}°</span>
+        <span class="label">{{ conditions }}</span>
+      {% else %}
+        <span class="value value--large">{{ conditions }}</span>
+        <span class="label">Weather Union</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="grid grid--cols-2">
+    <div class="item">
+      <div class="content">
+        <span class="value value--small">{% if humidity %}{{ humidity | round }}%{% else %}—{% endif %}</span>
+        <span class="label">Humidity</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="content">
+        <span class="value value--small">{% if wind_kmh %}{{ wind_kmh }} km/h{% else %}—{% endif %}</span>
+        <span class="label">Wind</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="content">
+        <span class="value value--small">{% if rain_i %}{{ rain_i }}{% else %}—{% endif %}</span>
+        <span class="label">Rain mm/min</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="content">
+        <span class="value value--small">{% if rain_a %}{{ rain_a }} mm{% else %}—{% endif %}</span>
+        <span class="label">Rain today</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="title_bar">
+  <img class="image" src="https://trmnl.com/images/plugins/weather--render.svg" alt="">
+  <span class="title">Weather Union</span>
+  <span class="instance">{{ trmnl.plugin_settings.custom_fields_values.location_label | default: "India" }}</span>
+</div>
