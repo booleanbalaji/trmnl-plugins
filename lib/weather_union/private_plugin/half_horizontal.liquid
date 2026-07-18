@@ -1,0 +1,35 @@
+<div class="layout">
+  <div class="grid grid--cols-2">
+    <div class="item">
+      <div class="content">
+        {% if temperature %}
+          <span class="value value--xlarge" data-fit-value="true">{{ temperature }}°</span>
+          <span class="label">{{ conditions | default: "Clear" }}</span>
+        {% else %}
+          <span class="value value--large">{{ conditions | default: error | default: "—" }}</span>
+          <span class="label">Weather Union</span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="item">
+      <div class="content">
+        {% if humidity %}
+          <span class="value value">{{ humidity }}%</span>
+          <span class="label">Humidity</span>
+        {% elsif rain_accumulation %}
+          <span class="value value">{{ rain_accumulation }} mm</span>
+          <span class="label">Rain today</span>
+        {% else %}
+          <span class="value value--xsmall">{{ wind_cardinal | default: "—" }}</span>
+          <span class="label">Wind</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="title_bar">
+  <img class="image" src="https://trmnl.com/images/plugins/weather--render.svg" alt="">
+  <span class="title">Weather Union</span>
+  <span class="instance">{{ trmnl.plugin_settings.custom_fields_values.location_label | default: "Local weather" }}</span>
+</div>

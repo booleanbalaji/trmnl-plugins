@@ -1,0 +1,97 @@
+{% assign wx = locality_weather_data %}
+{% assign temp = temperature | default: wx.temperature %}
+{% assign hum = humidity | default: wx.humidity %}
+{% assign wind_kmh = wind_speed_kmh %}
+{% unless wind_kmh %}
+  {% if wx.wind_speed %}{% assign wind_kmh = wx.wind_speed | times: 3.6 | round: 1 %}{% endif %}
+{% endunless %}
+{% assign wind_c = wind_cardinal %}
+{% assign wind_d = wind_direction | default: wx.wind_direction %}
+{% assign rain_i = rain_intensity | default: wx.rain_intensity %}
+{% assign rain_a = rain_accumulation | default: wx.rain_accumulation %}
+{% assign cond = conditions %}
+{% unless cond %}
+  {% if rain_i and rain_i > 0 %}{% assign cond = "Rain" %}{% else %}{% assign cond = "Clear" %}{% endif %}
+{% endunless %}
+{% assign dtype = device_type_label %}
+{% unless dtype %}
+  {% if device_type == 1 %}{% assign dtype = "AWS station" %}{% elsif device_type == 2 %}{% assign dtype = "Rain gauge" %}{% else %}{% assign dtype = "Station" %}{% endif %}
+{% endunless %}
+{% assign err = error %}
+{% if err == blank and message and message != blank and status == "200" and message != "Successful response fetched" %}
+  {% assign err = message %}
+{% endif %}
+
+{% if err and err != blank %}
+  <div class="layout layout--col gap--large">
+    <span class="value value--small">{{ err }}</span>
+    <span class="label">Pick a location near a Weather Union station in India (within ~2 km).</span>
+  </div>
+{% else %}
+  <div class="layout layout--col gap--space-between">
+    <div class="grid">
+      <div class="col col--span-4 col--end">
+        <div class="item h--full">
+          <div class="content">
+            {% if temp %}
+              <span class="value value--xxxlarge" data-fit-value="true">{{ temp | round: 1 }}°</span>
+              <span class="label">{{ cond }} · °C</span>
+            {% else %}
+              <span class="value value--xlarge">{{ cond }}</span>
+              <span class="label">{{ dtype }}</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="col col--span-4 col--end gap--medium">
+        {% if hum %}
+          <div class="item">
+            <div class="content">
+              <span class="value value--small">{{ hum | round }}%</span>
+              <span class="label">Humidity</span>
+            </div>
+          </div>
+        {% endif %}
+        {% if wind_kmh %}
+          <div class="item">
+            <div class="content">
+              <span class="value value--small">{{ wind_kmh }} km/h</span>
+              <span class="label">Wind{% if wind_c %} {{ wind_c }}{% endif %}{% if wind_d %} ({{ wind_d | round }}°){% endif %}</span>
+            </div>
+          </div>
+        {% endif %}
+        {% if rain_i %}
+          <div class="item">
+            <div class="content">
+              <span class="value value--small">{{ rain_i }} mm/min</span>
+              <span class="label">Rain intensity</span>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="grid grid--cols-2">
+      <div class="item">
+        <div class="content">
+          <span class="value value--small">{% if rain_a %}{{ rain_a }} mm{% else %}—{% endif %}</span>
+          <span class="label">Rain today (IST)</span>
+        </div>
+      </div>
+      <div class="item">
+        <div class="content">
+          <span class="value value--xsmall">{{ trmnl.plugin_settings.custom_fields_values.location_label | default: trmnl.plugin_settings.custom_fields_values.lat_lon | default: "Nearest station" }}</span>
+          <span class="label">{{ dtype }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<div class="title_bar">
+  <img class="image" src="https://trmnl.com/images/plugins/weather--render.svg" alt="">
+  <span class="title">Weather Union</span>
+  <span class="instance">{{ trmnl.plugin_settings.custom_fields_values.location_label | default: "Local weather" }}</span>
+</div>

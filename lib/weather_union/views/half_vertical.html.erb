@@ -1,0 +1,61 @@
+<div class="view view--half_vertical">
+  <% if error.present? %>
+    <div class="layout layout--col">
+      <span class="value value--xsmall weather-union-error"><%= error %></span>
+    </div>
+  <% else %>
+    <div class="layout layout--col gap--medium">
+      <div class="row row--center">
+        <img class="weather-union-image" src="<%= Rails.application.credentials.base_url %>/images/weather/<%= weather_image %>.svg" />
+      </div>
+
+      <div class="item">
+        <div class="meta"></div>
+        <div class="content">
+          <% if temperature.present? %>
+            <span class="value value--xlarge" data-fit-value="true"><%= temperature %>°</span>
+            <span class="label"><%= conditions %></span>
+          <% else %>
+            <span class="value value--large" data-fit-value="true"><%= conditions %></span>
+            <span class="label"><%= device_type_label %></span>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="grid grid--cols-2">
+        <div class="item">
+          <div class="meta"></div>
+          <div class="content">
+            <span class="value value--small"><%= humidity.nil? ? '—' : "#{humidity}%" %></span>
+            <span class="label">Humidity</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="meta"></div>
+          <div class="content">
+            <span class="value value--small"><%= wind_speed.nil? ? '—' : "#{wind_speed} #{units[:wind]}" %></span>
+            <span class="label">Wind <%= wind_cardinal %></span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="meta"></div>
+          <div class="content">
+            <span class="value value--small"><%= rain_intensity.nil? ? '—' : "#{rain_intensity}" %></span>
+            <span class="label">Rain mm/min</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="meta"></div>
+          <div class="content">
+            <span class="value value--small"><%= rain_accumulation.nil? ? '—' : "#{rain_accumulation} mm" %></span>
+            <span class="label">Rain today</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <%= render 'plugins/weather_union/shared/title_bar', location_label: location_label, refreshed_at: refreshed_at %>
+</div>
+
+<%= render 'plugins/weather_union/common' %>

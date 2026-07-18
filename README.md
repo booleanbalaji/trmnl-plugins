@@ -30,6 +30,7 @@ community Recipes:
 - [Tempest Weather Station](/lib/tempest_weather_station)
 - [Todoist](/lib/todoist)
 - [Weather (generic)](/lib/weather)
+- [Weather Union](/lib/weather_union) (India hyper-local / Zomato giveback)
 - [Withings](/lib/withings)
 - [Youtube Analytics](/lib/youtube_analytics)
 

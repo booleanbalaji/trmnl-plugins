@@ -1,0 +1,46 @@
+<div class="layout layout--col gap--medium">
+  <div class="item">
+    <div class="content">
+      {% if temperature %}
+        <span class="value value--xlarge" data-fit-value="true">{{ temperature }}°</span>
+        <span class="label">{{ conditions | default: "Clear" }}</span>
+      {% else %}
+        <span class="value value--large">{{ conditions | default: error | default: "—" }}</span>
+        <span class="label">Weather Union</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="grid grid--cols-2">
+    <div class="item">
+      <div class="content">
+        <span class="value value--small">{% if humidity %}{{ humidity }}%{% else %}—{% endif %}</span>
+        <span class="label">Humidity</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="content">
+        <span class="value value--small">{% if wind_speed_kmh %}{{ wind_speed_kmh }} km/h{% else %}—{% endif %}</span>
+        <span class="label">Wind {{ wind_cardinal }}</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="content">
+        <span class="value value--small">{% if rain_intensity %}{{ rain_intensity }}{% else %}—{% endif %}</span>
+        <span class="label">Rain mm/min</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="content">
+        <span class="value value--small">{% if rain_accumulation %}{{ rain_accumulation }} mm{% else %}—{% endif %}</span>
+        <span class="label">Rain today</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="title_bar">
+  <img class="image" src="https://trmnl.com/images/plugins/weather--render.svg" alt="">
+  <span class="title">Weather Union</span>
+  <span class="instance">{{ trmnl.plugin_settings.custom_fields_values.location_label | default: "Local weather" }}</span>
+</div>
