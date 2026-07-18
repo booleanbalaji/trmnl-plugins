@@ -2,7 +2,9 @@
 name: Weather Union
 strategy: polling
 refresh_interval: 30
-polling_url: https://www.weatherunion.com/gw/weather/external/v0/get_weather_data?latitude=##{{ latitude }}&longitude=##{{ longitude }}
+# Split the lat_lon picker value ("lat,lon") into Weather Union query params.
+# Weather Union resolves the nearest station within ~2 km of those coordinates.
+polling_url: "{% assign parts = lat_lon | split: ',' %}{% assign lat = parts[0] | strip %}{% assign lon = parts[1] | strip %}https://www.weatherunion.com/gw/weather/external/v0/get_weather_data?latitude={{ lat }}&longitude={{ lon }}"
 polling_headers: x-zomato-api-key=##{{ api_key }}
 polling_verb: GET
 no_screen_padding: 'no'
@@ -13,19 +15,13 @@ custom_fields:
     name: Weather Union API Key
     description: Free key from weatherunion.com profile → Your API access key
     encrypted: true
-  - keyname: latitude
-    field_type: string
-    name: Latitude
-    description: Example 28.630630 (Connaught Place). Must be within ~2 km of a Weather Union station.
-    placeholder: '28.630630'
-  - keyname: longitude
-    field_type: string
-    name: Longitude
-    description: Example 77.220640
-    placeholder: '77.220640'
+  - keyname: lat_lon
+    field_type: lat_lon
+    name: Location
+    description: Search your area (or paste lat,lon). Weather Union maps this to the nearest India station within ~2 km.
   - keyname: location_label
     field_type: string
-    name: Location label
-    description: Shown in the title bar
+    name: Display name (optional)
+    description: Friendly title for the screen. Leave blank to use your searched location coords.
     placeholder: Connaught Place
     optional: true

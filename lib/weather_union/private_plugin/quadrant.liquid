@@ -1,29 +1,19 @@
-{% assign wx = locality_weather_data %}
-{% assign temp = wx.temperature %}
-{% assign humidity = wx.humidity %}
-{% assign rain_a = wx.rain_accumulation %}
-{% if wx.rain_intensity and wx.rain_intensity > 0 %}
-  {% assign conditions = "Rain" %}
-{% else %}
-  {% assign conditions = "Clear" %}
-{% endif %}
-
 <div class="layout layout--col gap--space-between">
   <div class="item">
     <div class="content">
-      {% if temp %}
-        <span class="value value--large" data-fit-value="true">{{ temp | round: 1 }}°</span>
-        <span class="label">{{ conditions }}</span>
+      {% if temperature %}
+        <span class="value value--large" data-fit-value="true">{{ temperature }}°</span>
+        <span class="label">{{ conditions | default: "Clear" }}</span>
       {% else %}
-        <span class="value value--small">{{ conditions }}</span>
+        <span class="value value--small">{{ conditions | default: error | default: "—" }}</span>
         <span class="label">Weather Union</span>
       {% endif %}
     </div>
   </div>
   <div class="item">
     <div class="content">
-      <span class="label">{% if humidity %}{{ humidity | round }}% RH{% else %}—{% endif %}</span>
-      <span class="label">{% if rain_a %}{{ rain_a }} mm today{% else %}—{% endif %}</span>
+      <span class="label">{% if humidity %}{{ humidity }}% RH{% else %}—{% endif %}</span>
+      <span class="label">{% if rain_accumulation %}{{ rain_accumulation }} mm today{% else %}—{% endif %}</span>
     </div>
   </div>
 </div>
@@ -31,5 +21,5 @@
 <div class="title_bar">
   <img class="image" src="https://trmnl.com/images/plugins/weather--render.svg" alt="">
   <span class="title">Weather Union</span>
-  <span class="instance">{{ trmnl.plugin_settings.custom_fields_values.location_label | default: "India" }}</span>
+  <span class="instance">{{ trmnl.plugin_settings.custom_fields_values.location_label | default: "Local" }}</span>
 </div>

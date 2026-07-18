@@ -90,10 +90,14 @@ See [usetrmnl/trmnlp](https://github.com/usetrmnl/trmnlp).
 | TRMNL MCP API key | Private plugin settings (right side after Save) | Cursor MCP (`https://trmnl.com/mcp?api_key=…`) |
 | TRMNL User API key | [trmnl.com/account](https://trmnl.com/account) | `trmnlp push` / CI |
 
-## Location tip
+## Location = lat/lon → nearest station
 
-Weather Union only works within ~2 km of a listed station. Example Connaught Place:
+Yes — the plugin is built around that:
 
-- latitude `28.630630`
-- longitude `77.220640`
-- locality id `ZWL006538`
+1. You pick a place with the **Location** field (`lat_lon` picker: search or paste `lat,lon`)
+2. Polling URL splits that into `latitude` / `longitude`
+3. Weather Union returns data from the **nearest station within ~2 km**
+
+TRMNL devices don’t have live GPS, so “current location” means the location you set once in the plugin form (search your neighborhood). Optional **Display name** overrides the title bar label.
+
+Example Connaught Place: `28.630630,77.220640` (locality `ZWL006538`).
